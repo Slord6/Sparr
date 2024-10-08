@@ -1,4 +1,5 @@
 import { RuntimeError } from "./errors/errors";
+import { Token } from "./lexing/token";
 import { Binary, Data, Literal, Operation, Zero, Copy, Unary, ConditionalCopy, Condition, OperationAction } from "./operation";
 import { GeneralRegisterIndex, Register, SpecialRegister } from "./register";
 
@@ -20,8 +21,19 @@ export class VM {
     private _operations: Operation[];
 
     constructor(operations: Operation[]) {
-        // Insert no-op so that program operations are 1-indexed
-        this._operations = [{ type: "Noop", action: "Noop" }, ...operations]
+
+        // Insert no-ops so that jumps to lines work as expected
+        const lastLine = operations[operations.length - 1].rootCommandToken.line;
+        this._operations = [];
+        for(let i = 0; i < lastLine + 1; i++) {
+            const existingLine: undefined | Operation = operations.filter((o) => o.rootCommandToken.line === i)[0];
+            if(!existingLine) {
+                this._operations.push({action: "Noop", rootCommandToken: null as any as Token, type: "Noop"});
+            } else {
+                this._operations.push(existingLine);
+            }
+        }
+        console.log(this._operations);
     }
 
     private halt(): boolean {
@@ -137,6 +149,7 @@ export class VM {
         this._rc++;
         switch (operation.action) {
             case "Noop":
+                break;
             case "Set":
                 this.set(operation as Unary);
                 break;

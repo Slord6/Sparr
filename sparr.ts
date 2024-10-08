@@ -14,11 +14,11 @@ const prog = fs.readFileSync(args[0]).toString();
 
 const scanner = new Scanner(prog);
 const tokens = scanner.scanTokens();
-// console.log("SCAN RESULT:", tokens.map(tokenToString));
+console.log("SCAN RESULT:", tokens.map(tokenToString));
 
 const parser = new Parser(tokens);
 const operations = parser.parse();
-// console.log("PARSE RESULT", operations);
+console.log("PARSE RESULT", operations);
 
 const vm = new VM(operations);
 vm.run();

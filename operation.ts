@@ -55,6 +55,7 @@ export type Data = Literal | Register;
 export interface Operation {
     type: OperationType;
     action: OperationAction;
+    rootCommandToken: Token;
 }
 
 export interface Zero extends Operation {

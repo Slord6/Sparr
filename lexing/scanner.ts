@@ -98,6 +98,7 @@ export class Scanner {
 
     private scanToken() {
         const c = this.advance();
+        console.log("Scanning", c);
         switch (c) {
             case "r":
                 this.register();
@@ -105,6 +106,7 @@ export class Scanner {
             case "\r":
             case "\t":
                 // Ignore whitespace.
+                console.log("ignore wsp");
                 break;
             case "\n":
                 this.addToken(TokenType.CommandEnd, null);
@@ -113,6 +115,7 @@ export class Scanner {
             case "#":
                 // Skip comments
                 while (this.peek() !== "\n") this.advance();
+                console.log("Skipped comment, new char is", this.peek());
                 break;
             default:
                 if (this.isDigit(c)) {
