@@ -69,3 +69,9 @@ Apply the operation to the two values (either literals or stored in a register) 
 `wrt <number>`
 
 Write the value in the given register, or the given value to the screen 
+
+## Write Stack
+
+`wrts`
+
+Pop all values off the stack in order and print to screen

@@ -1,6 +1,23 @@
 import { Token } from "./lexing/token";
 import { Register } from "./register";
 
+export type OpString = 
+    | "set"
+    | "push"
+    | "pop"
+    | "cp"
+    | "cpgt"
+    | "cplt"
+    | "cpeq"
+    | "add"
+    | "sub"
+    | "mul"
+    | "div"
+    | "wrt"
+    | "wrts"
+    | "wrtc"
+    | "wrtsc"
+
 export type OperationType =
     | "Noop"
     | "NoArg"
@@ -21,7 +38,10 @@ export type OperationAction =
     | "Sub"
     | "Mul"
     | "Div"
-    | "Write";
+    | "Write"
+    | "WriteStack"
+    | "WriteChar"
+    | "WriteStackChars"
 
 export type Condition =
     | "GT"

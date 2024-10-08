@@ -1,6 +1,6 @@
 import { ParseError } from "../errors/errors";
 import { Token, tokenToString, TokenType } from "../lexing/token";
-import { Binary, Condition, ConditionalCopy, Copy, Literal, Operation, Quad, Unary, Zero } from "../operation";
+import { Binary, Condition, ConditionalCopy, Copy, Literal, Operation, OpString, Unary, Zero } from "../operation";
 import { Register } from "../register";
 
 export class Parser {
@@ -103,11 +103,30 @@ export class Parser {
         return { type: "UnaryArg", action: "Write", v1: args[0] } as Unary;
     }
 
+    private writeStack(args: (Register | Literal)[]): Operation {
+        this.requireSetLength(args, 0, `Invalid number of arguments (${args.length}) for write stack command`);
+        return { type: "NoArg", action: "WriteStack"} as Zero;
+    }
+
+    private writeStackChars(args: (Register | Literal)[]): Operation {
+        this.requireSetLength(args, 0, `Invalid number of arguments (${args.length}) for write stack chars command`);
+        return { type: "NoArg", action: "WriteStackChars"} as Zero;
+    }
+
+    private writeChar(args: (Register | Literal)[]): Operation {
+        this.requireSetLength(args, 1, `Invalid number of arguments (${args.length}) for write char command`);
+        return { type: "UnaryArg", action: "WriteChar", v1: args[0] } as Unary;
+    }
+
+    private assertCoverallOpStrings(x: never): never {
+        throw new Error("Can't get here");
+    }
 
     private command(parts: Token[]): Operation {
         const action = parts.shift();
         const args = parts.map(this.tokenToValue);
-        switch (action?.lexeme.toLowerCase()) {
+        const opString = action?.lexeme.toLowerCase() as OpString;
+        switch (opString) {
             case "set":
                 return this.set(args);
             case "push":
@@ -119,7 +138,7 @@ export class Parser {
             case "cpgt":
             case "cplt":
             case "cpeq":
-                return this.conditionalCopy(action, args);
+                return this.conditionalCopy(action as Token, args);
             case "add":
                 return this.add(args);
             case "sub":
@@ -130,8 +149,14 @@ export class Parser {
                 return this.divide(args);
             case "wrt":
                 return this.write(args);
+            case "wrts":
+                return this.writeStack(args);
+            case "wrtc":
+                return this.writeChar(args);
+            case "wrtsc":
+                return this.writeStackChars(args);
             default:
-                throw new ParseError(`Unknown command (line ${action?.line}): ${action ? tokenToString(action) : action})`);
+                this.assertCoverallOpStrings(opString)
         }
     }
 

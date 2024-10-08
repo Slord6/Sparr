@@ -1,5 +1,5 @@
 import { RuntimeError } from "./errors/errors";
-import { Binary, Data, Literal, Operation, Zero, Copy, Unary, ConditionalCopy, Condition } from "./operation";
+import { Binary, Data, Literal, Operation, Zero, Copy, Unary, ConditionalCopy, Condition, OperationAction } from "./operation";
 import { GeneralRegisterIndex, Register, SpecialRegister } from "./register";
 
 export class VM {
@@ -110,6 +110,26 @@ export class VM {
         console.log(this.resolve(write.v1));
     }
 
+    private writeStack(): void {
+        const output = this._stack.reverse().join(" ");
+        this._stack = [];
+        console.log(output);
+    }
+
+    private writeStackChars(): void {
+        const output = this._stack.reverse().map(n => String.fromCharCode(n)).join("");
+        this._stack = [];
+        console.log(output);
+    }
+
+    private writeChar(writeChar: Unary): void {
+        console.log(String.fromCharCode(this.resolve(writeChar.v1)));
+    }
+
+    private assertCoverAllActions(action: never): never {
+        throw new Error("Didn't expect to get here");
+    }
+
     private step() {
         const operation: Operation = this._operations[this._rc];
         // Increment prog counter before the operation as this shows the next operation location
@@ -147,6 +167,17 @@ export class VM {
             case "Write":
                 this.write(operation as Unary);
                 break;
+            case "WriteStack":
+                this.writeStack();
+                break;
+            case "WriteChar":
+                this.writeChar(operation as Unary);
+                break;
+            case "WriteStackChars":
+                this.writeStackChars();
+                break;
+            default:
+                this.assertCoverAllActions(operation.action);
         }
     }
 

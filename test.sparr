@@ -1,8 +1,13 @@
-set 11
-cp rv r0
-set 22
-cp rv r1
+set 111
+push
+set 112
+push
+set 113
+push
+set 114
+push
+set 115
+wrtsc
 
-div r0 r1
-
-wrt rv
+wrtc 110
+wrtc 109
