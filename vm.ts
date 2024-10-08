@@ -33,7 +33,6 @@ export class VM {
                 this._operations.push(existingLine);
             }
         }
-        console.log(this._operations);
     }
 
     private halt(): boolean {

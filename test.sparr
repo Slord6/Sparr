@@ -1,20 +1,18 @@
 # Setup our loop start marker
 set 12
 cp rv r9 # Store loop start in r9
-wrt r9
+
 
 # Counter into r0
-set 90
+set 122
 cp rv r0
 push
 
 # Start loop - incrementing r0 by 1 every time
-wrt r0
-add r0 1
+sub r0 1
 cp rv r0
 push
 # Loop exit condition - continue while counter < 100
-cplt r9 rc r0 100
+cpgt r9 rc r0 97
 
-wrt r0
 wrtsc
