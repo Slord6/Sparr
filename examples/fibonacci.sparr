@@ -1,0 +1,47 @@
+# How many we want to generate, stored in r8
+set 9
+cp rv r8
+
+set 1
+push
+# Skip to end if we only wanted 1
+cpeq 45 rc r8 1
+set 1
+push
+# Skip to end if we only wanted 2
+cpeq 45 rc r8 2
+
+## We use r9 as our counter for how many numbers we've generated
+set 2
+cp rv r9
+
+# Store start of loop location in r7
+set 22
+cp rv r7
+
+## Start of loop
+
+# Get last two results
+pop
+cp rv r0
+pop
+cp rv r1
+
+# First replace the last two
+cp r1 rv
+push
+cp r0 rv
+push
+
+add r0 r1
+push
+
+add r9 1
+cp rv r9
+
+## Loop if unfinised
+cplt r7 rc r9 r8
+
+## End of loop 
+
+wrts
