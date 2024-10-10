@@ -8,6 +8,7 @@ Made up of:
 - 10 general use registers `r0` to `r9`.
 - Value register `rv`, primarily for storing the output of operations but can also be accessed as a general register.
 - Prog counter `rc`, the next instruction to be executed; writeable.
+- Stack size register (readonly), `rs`.
 
 At initalisation, all registers have the value `0` unless otherwise stated. The stack starts empty.
 
@@ -33,6 +34,8 @@ There are two stacks A and B. Only one is "active" at a time and is the target o
 `swap`
 
 Swaps the active stack
+
+The `rs` register is readonly and holds the size of the currently active stack.
 
 ### Set
 

@@ -36,6 +36,10 @@ export class VM {
         this._stackB = value;
     }
 
+    private get _rs(): number {
+        return this.stack.length;
+    }
+
     constructor(operations: Operation[]) {
 
         // Insert no-ops so that jumps to lines work as expected
@@ -68,6 +72,9 @@ export class VM {
     }
 
     private setRegisterValue(index: Register, value: number) {
+        if(index === `s`) {
+            throw new RuntimeError(`Cannot set stack size register (rs)`);
+        }
         this[`_r${index}`] = value;
     }
 

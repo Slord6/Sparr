@@ -1,0 +1,11 @@
+wrt rs
+
+set 1
+push
+set 2
+push
+set 3
+push
+
+wrt rs
+wrts

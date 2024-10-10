@@ -12,6 +12,7 @@ export type GeneralRegisterIndex =
 
 export type SpecialRegister =
     | "v"
-    | "c";
+    | "c"
+    | "s";
 
 export type Register = GeneralRegisterIndex | SpecialRegister;

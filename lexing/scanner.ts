@@ -80,7 +80,7 @@ export class Scanner {
             while (this.isDigit(this.peek())) this.advance();
             const registerNumber = Number.parseFloat(this._source.substring(this._start + 1, this._current));
             this.addToken(TokenType.Register, registerNumber);
-        } else if (this.match("v") || this.match("c")) {
+        } else if (this.match("v") || this.match("c") || this.match("s")) {
             this.addToken(TokenType.Register, this.previous());
         } else {
             throw new LexError(`${this._line}: Invalid register`);

@@ -4,19 +4,15 @@ cp rv r8
 
 set 1
 push
-# Skip to end if we only wanted 1
-cpeq 45 rc r8 1
+# Skip to end of the loop if we only wanted 1
+cpeq 41 rc r8 1
 set 1
 push
 # Skip to end if we only wanted 2
-cpeq 45 rc r8 2
-
-## We use r9 as our counter for how many numbers we've generated
-set 2
-cp rv r9
+cpeq 41 rc r8 2
 
 # Store start of loop location in r7
-set 22
+set 18
 cp rv r7
 
 ## Start of loop
@@ -40,7 +36,7 @@ add r9 1
 cp rv r9
 
 ## Loop if unfinised
-cplt r7 rc r9 r8
+cplt r7 rc rs r8
 
 ## End of loop 
 
