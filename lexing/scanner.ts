@@ -115,7 +115,7 @@ export class Scanner {
                 while (this.peek() !== "\n") this.advance();
                 break;
             default:
-                if (this.isDigit(c)) {
+                if (this.isDigit(c) || c === "-") {
                     this.number();
                 } else if (this.isAlphaNumeric(c)) {
                     this.command(c);

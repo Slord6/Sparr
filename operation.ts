@@ -17,6 +17,7 @@ export type OpString =
     | "wrts"
     | "wrtc"
     | "wrtsc"
+    | "swap"
 
 export type OperationType =
     | "Noop"
@@ -42,6 +43,7 @@ export type OperationAction =
     | "WriteStack"
     | "WriteChar"
     | "WriteStackChars"
+    | "Swap"
 
 export type Condition =
     | "GT"

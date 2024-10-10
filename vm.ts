@@ -4,7 +4,9 @@ import { Binary, Data, Literal, Operation, Zero, Copy, Unary, ConditionalCopy, C
 import { GeneralRegisterIndex, Register, SpecialRegister } from "./register";
 
 export class VM {
-    private _stack: number[] = [];
+    private _stackA: number[] = [];
+    private _stackB: number[] = [];
+    private _activeStack: "A" | "B" = "A";
     private _r0: number = 0;
     private _r1: number = 0;
     private _r2: number = 0;
@@ -19,6 +21,20 @@ export class VM {
     private _rv: number = 1;
 
     private _operations: Operation[];
+
+    private get stack(): number[] {
+        if(this._activeStack === "A") {
+            return this._stackA;
+        }
+        return this._stackB;
+    }
+
+    private set stack(value: number[]) {
+        if(this._activeStack === "A") {
+            this._stackA = value;
+        }
+        this._stackB = value;
+    }
 
     constructor(operations: Operation[]) {
 
@@ -37,6 +53,14 @@ export class VM {
 
     private halt(): boolean {
         return this._rc <= 0 || this._rc >= this._operations.length;
+    }
+
+    private swapStack(): void {
+        if(this._activeStack === "A") {
+            this._activeStack = "B";
+        } else {
+            this._activeStack = "A";
+        }
     }
 
     private getRegisterValue(index: Register): number {
@@ -70,14 +94,14 @@ export class VM {
     }
 
     private push(): void {
-        this._stack.push(this._rv);
+        this.stack.push(this._rv);
     }
 
     private pop(): void {
-        if (this._stack.length === 0) {
+        if (this.stack.length === 0) {
             throw new RuntimeError(`Tried to pop from empty stack. ${JSON.stringify(this)}`);
         };
-        this.storeResult(this._stack.pop() as number);
+        this.storeResult(this.stack.pop() as number);
     }
 
     private copy(copy: Copy): void {
@@ -122,14 +146,14 @@ export class VM {
     }
 
     private writeStack(): void {
-        const output = this._stack.reverse().join(" ");
-        this._stack = [];
+        const output = this.stack.reverse().join(" ");
+        this.stack = [];
         console.log(output);
     }
 
     private writeStackChars(): void {
-        const output = this._stack.reverse().map(n => String.fromCharCode(n)).join("");
-        this._stack = [];
+        const output = this.stack.reverse().map(n => String.fromCharCode(n)).join("");
+        this.stack = [];
         console.log(output);
     }
 
@@ -187,6 +211,9 @@ export class VM {
                 break;
             case "WriteStackChars":
                 this.writeStackChars();
+                break;
+            case "Swap":
+                this.swapStack();
                 break;
             default:
                 this.assertCoverAllActions(operation.action);

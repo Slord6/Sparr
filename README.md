@@ -4,7 +4,7 @@
 ## The VM
 
 Made up of:
-- The `stack`.
+- Two `stack`s, A and B.
 - 10 general use registers `r0` to `r9`.
 - Value register `rv`, primarily for storing the output of operations but can also be accessed as a general register.
 - Prog counter `rc`, the next instruction to be executed; writeable.
@@ -25,6 +25,14 @@ If the prog counter is ever set outside the bounds (<0 or >prog length) of the p
 `add 1 1 # comment`
 
 ## Operations
+
+### Stacks and Switching
+
+There are two stacks A and B. Only one is "active" at a time and is the target of all stack-related operations
+
+`swap`
+
+Swaps the active stack
 
 ### Set
 

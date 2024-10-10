@@ -1,0 +1,13 @@
+set 1
+push
+
+swap
+wrts
+
+set 2
+push
+
+wrts
+
+swap
+wrts

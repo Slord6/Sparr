@@ -1,0 +1,40 @@
+set 5
+push
+set 4
+push
+set 3
+push
+set 2
+push
+set 1
+push
+
+set -1
+
+pop
+swap
+push
+swap
+
+pop
+swap
+push
+swap
+
+pop
+swap
+push
+swap
+
+pop
+swap
+push
+swap
+
+pop
+swap
+push
+
+wrts
+swap
+wrts

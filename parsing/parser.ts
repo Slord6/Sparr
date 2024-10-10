@@ -60,6 +60,11 @@ export class Parser {
         return { rootCommandToken: token, type: "NoArg", action: "Pop" } as Zero;
     }
 
+    private swap(token: Token, args: (Register | Literal)[]): Operation {
+        this.requireSetLength(args, 0, `Invalid number of arguments (${args.length}) for pop command`);
+        return { rootCommandToken: token, type: "NoArg", action: "Swap" } as Zero;
+    }
+
     private copy(token: Token, args: (Register | Literal)[]): Operation {
         this.requireSetLength(args, 2, `Invalid number of arguments (${args.length}) for copy command`);
         return { rootCommandToken: token, type: "BinaryArg", action: "Copy", v1: args[0], v2: args[1] } as Copy;
@@ -155,6 +160,8 @@ export class Parser {
                 return this.writeChar(action as Token, args);
             case "wrtsc":
                 return this.writeStackChars(action as Token, args);
+            case "swap":
+                return this.swap(action as Token, args);
             default:
                 this.assertCoverallOpStrings(opString);
         }
