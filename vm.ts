@@ -23,14 +23,14 @@ export class VM {
     private _operations: Operation[];
 
     private get stack(): number[] {
-        if(this._activeStack === "A") {
+        if (this._activeStack === "A") {
             return this._stackA;
         }
         return this._stackB;
     }
 
     private set stack(value: number[]) {
-        if(this._activeStack === "A") {
+        if (this._activeStack === "A") {
             this._stackA = value;
         }
         this._stackB = value;
@@ -45,10 +45,10 @@ export class VM {
         // Insert no-ops so that jumps to lines work as expected
         const lastLine = operations[operations.length - 1].rootCommandToken.line;
         this._operations = [];
-        for(let i = 0; i < lastLine + 1; i++) {
+        for (let i = 0; i < lastLine + 1; i++) {
             const existingLine: undefined | Operation = operations.filter((o) => o.rootCommandToken.line === i)[0];
-            if(!existingLine) {
-                this._operations.push({action: "Noop", rootCommandToken: null as any as Token, type: "Noop"});
+            if (!existingLine) {
+                this._operations.push({ action: "Noop", rootCommandToken: null as any as Token, type: "Noop" });
             } else {
                 this._operations.push(existingLine);
             }
@@ -60,7 +60,7 @@ export class VM {
     }
 
     private swapStack(): void {
-        if(this._activeStack === "A") {
+        if (this._activeStack === "A") {
             this._activeStack = "B";
         } else {
             this._activeStack = "A";
@@ -72,7 +72,7 @@ export class VM {
     }
 
     private setRegisterValue(index: Register, value: number) {
-        if(index === `s`) {
+        if (index === `s`) {
             throw new RuntimeError(`Cannot set stack size register (rs)`);
         }
         this[`_r${index}`] = value;
@@ -136,16 +136,20 @@ export class VM {
         this.binaryOp(add.v1, add.v2, (a, b) => a + b);
     }
 
-    private sub(add: Binary): void {
-        this.binaryOp(add.v1, add.v2, (a, b) => a - b);
+    private sub(sub: Binary): void {
+        this.binaryOp(sub.v1, sub.v2, (a, b) => a - b);
     }
 
-    private mul(add: Binary): void {
-        this.binaryOp(add.v1, add.v2, (a, b) => a * b);
+    private mul(mul: Binary): void {
+        this.binaryOp(mul.v1, mul.v2, (a, b) => a * b);
     }
 
-    private div(add: Binary): void {
-        this.binaryOp(add.v1, add.v2, (a, b) => a / b);
+    private div(div: Binary): void {
+        this.binaryOp(div.v1, div.v2, (a, b) => a / b);
+    }
+
+    private mod(mod: Binary): void {
+        this.binaryOp(mod.v1, mod.v2, (a, b) => a % b);
     }
 
     private write(write: Unary): void {
@@ -206,6 +210,9 @@ export class VM {
                 break;
             case "Div":
                 this.div(operation as Binary);
+                break;
+            case "Mod":
+                this.mod(operation as Binary);
                 break;
             case "Write":
                 this.write(operation as Unary);

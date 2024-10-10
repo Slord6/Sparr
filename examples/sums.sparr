@@ -1,0 +1,20 @@
+set 10
+push
+set 4
+push
+wrts
+
+sub 10 4
+wrt rv
+
+add 10 4
+wrt rv
+
+mul 10 4
+wrt rv
+
+div 10 4
+wrt rv
+
+mod 10 4
+wrt rv

@@ -73,7 +73,7 @@ Copy the value in register `rx` to register `ry`
 
 Copy the value in rx to ry, if `rz <op> rw` is true
 
-### Add/Sub/Mul/Div
+### Add/Sub/Mul/Div/Mod
 `add rx ry` - Addition
 
 `sub <number> <number>` - Subtraction
@@ -81,6 +81,8 @@ Copy the value in rx to ry, if `rz <op> rw` is true
 `mul rx <number>` - Multiplication
 
 `div <number> ry` - Division
+
+`mod <number> ry` - Modulus
 
 Apply the operation to the two values (either literals or stored in a register) and store in `rv`.
  The operation is always applied as read, i.e. `div 1 2` is equivalent to `1 / 2`.

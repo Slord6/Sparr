@@ -103,6 +103,11 @@ export class Parser {
         return { rootCommandToken: token, type: "BinaryArg", action: "Div", v1: args[0], v2: args[1] } as Binary;
     }
 
+    private modulus(token: Token, args: (Register | Literal)[]): Operation {
+        this.requireSetLength(args, 2, `Invalid number of arguments (${args.length}) for modulus command`);
+        return { rootCommandToken: token, type: "BinaryArg", action: "Mod", v1: args[0], v2: args[1] } as Binary;
+    }
+
     private write(token: Token, args: (Register | Literal)[]): Operation {
         this.requireSetLength(args, 1, `Invalid number of arguments (${args.length}) for write command`);
         return { rootCommandToken: token, type: "UnaryArg", action: "Write", v1: args[0] } as Unary;
@@ -110,12 +115,12 @@ export class Parser {
 
     private writeStack(token: Token, args: (Register | Literal)[]): Operation {
         this.requireSetLength(args, 0, `Invalid number of arguments (${args.length}) for write stack command`);
-        return { rootCommandToken: token, type: "NoArg", action: "WriteStack"} as Zero;
+        return { rootCommandToken: token, type: "NoArg", action: "WriteStack" } as Zero;
     }
 
     private writeStackChars(token: Token, args: (Register | Literal)[]): Operation {
         this.requireSetLength(args, 0, `Invalid number of arguments (${args.length}) for write stack chars command`);
-        return { rootCommandToken: token, type: "NoArg", action: "WriteStackChars"} as Zero;
+        return { rootCommandToken: token, type: "NoArg", action: "WriteStackChars" } as Zero;
     }
 
     private writeChar(token: Token, args: (Register | Literal)[]): Operation {
@@ -152,6 +157,8 @@ export class Parser {
                 return this.multiply(action as Token, args);
             case "div":
                 return this.divide(action as Token, args);
+            case "mod":
+                return this.modulus(action as Token, args);
             case "wrt":
                 return this.write(action as Token, args);
             case "wrts":
@@ -175,14 +182,14 @@ export class Parser {
             do {
                 commandParts.push(this.advance());
             } while (!this.atEnd() && this.peek().type !== TokenType.CommandEnd);
-            
-            while(this.peek().type === TokenType.CommandEnd) this.advance(); // Handle multiple consecutive empty lines
+
+            while (this.peek().type === TokenType.CommandEnd) this.advance(); // Handle multiple consecutive empty lines
 
             // Handle empty lines/comments
-            while(commandParts.length > 0 && commandParts[0].type === TokenType.CommandEnd) {
+            while (commandParts.length > 0 && commandParts[0].type === TokenType.CommandEnd) {
                 commandParts.shift();
             }
-            if(commandParts.length === 0) continue;
+            if (commandParts.length === 0) continue;
 
             try {
                 operations.push(this.command(commandParts));

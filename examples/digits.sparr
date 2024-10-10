@@ -1,0 +1,29 @@
+# Split the following integer into it's digits
+set -9971
+
+# If negative, make positive and output "-"
+cpgt 9 rc rv 0
+mul rv -1
+wrtc 45
+
+## Loop start
+cp rv r0
+# Get last digit and add to stack
+mod rv 10
+push
+
+# Shift 
+div r0 10
+cp rv r0
+
+# Now need to floor result
+# First, find the decimal part
+mod rv 1
+# Now take that from the previous result
+sub r0 rv
+
+# Repeat while result is >0
+cpgt 4 rc rv 0
+
+# Print result
+wrts
