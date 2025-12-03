@@ -3,6 +3,7 @@ export enum TokenType {
     EOF,
 
     Number,
+    AlphaNumber,
     Register,
 
     Command,
