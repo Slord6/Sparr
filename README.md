@@ -1,6 +1,16 @@
 # Sparr
  A toy VM
 
+## Quick start
+
+```bash
+npm i
+npx tsc
+node ./dist/sparr.js ./examples/fibonacci.sparr
+```
+
+Consider installing the VSCode syntax highlighting [extension](https://github.com/Slord6/sparr-language-extension).
+
 ## The VM
 
 Made up of:
