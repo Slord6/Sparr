@@ -40,7 +40,7 @@ export class VM {
         return this.stack.length;
     }
 
-    constructor(operations: Operation[]) {
+    constructor(operations: Operation[], stackA: number[] = []) {
 
         // Insert no-ops so that jumps to lines work as expected
         const lastLine = operations[operations.length - 1].rootCommandToken.line;
@@ -53,6 +53,7 @@ export class VM {
                 this._operations.push(existingLine);
             }
         }
+        this._stackA = stackA;
     }
 
     private halt(): boolean {
@@ -87,10 +88,10 @@ export class VM {
             return (data as Literal).value;
         }
         return this.getRegisterValue(data as Register);
-
     }
 
     public run() {
+        console.log("VM Start");
         while (!this.halt()) {
             this.step();
         }

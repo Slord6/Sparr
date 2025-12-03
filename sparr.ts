@@ -11,6 +11,18 @@ if(args.length == 0) {
 }
 
 const prog = fs.readFileSync(args[0]).toString();
+let stackA: number[] = [];
+if(args.length >= 2) {
+    const stackFile = fs.readFileSync(args[1]).toString();
+    stackA = stackFile.split("\n").map((v) => {
+        let d = parseInt(v.trim());
+        if(Number.isNaN(d)) {
+            d = v.charCodeAt(0);
+        }
+        return d;
+    });
+    console.log(`Loaded ${stackA.length} initial stack A values from ${args[1]}`);
+}
 
 const scanner = new Scanner(prog);
 const tokens = scanner.scanTokens();
@@ -20,5 +32,5 @@ const parser = new Parser(tokens);
 const operations = parser.parse();
 // console.log("PARSE RESULT", operations);
 
-const vm = new VM(operations);
+const vm = new VM(operations, stackA);
 vm.run();
