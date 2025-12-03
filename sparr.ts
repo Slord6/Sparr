@@ -6,7 +6,7 @@ import * as fs from 'fs';
 
 const args = process.argv.slice(2, process.argv.length);
 if(args.length == 0) {
-    console.error("Require file to run");
+    console.error("sparr <path to file.sparr> [<path to stack A initial values file, new line separated>]");
     process.exit(1);
 }
 
