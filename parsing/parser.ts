@@ -30,11 +30,13 @@ export class Parser {
     }
 
     private tokenToValue(token: Token): Register | Literal {
-        if (token.type !== TokenType.Number && token.type !== TokenType.Register) {
+        if (token.type !== TokenType.Number && token.type !== TokenType.AlphaNumber && token.type !== TokenType.Register) {
             throw new ParseError(`Invalid value (line ${token.line}): "${token.lexeme}" (${tokenToString(token)}), expected register or number`);
         }
         if (token.type === TokenType.Number) {
             return { type: "Literal", value: token.value as any as number };
+        } else if (token.type === TokenType.AlphaNumber) {
+            return { type: "Literal", value: (token.value as any as string).charCodeAt(0) };
         } else {
             if (typeof token.value === "number") {
                 if (token.value < 0 || token.value > 9) {
