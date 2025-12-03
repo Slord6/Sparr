@@ -1,0 +1,84 @@
+# Assumes that data was provided to VM on CLI
+# Start by reversing the input
+# Start reverse loop
+
+    # Pop A
+    pop
+    # Switch to B
+    swap
+    # Push onto B
+    push
+    # Switch back to A
+    swap
+
+    # If stack A not empty, keep looping (stack size > 0)
+    cpgt 2 rc rs 0
+
+# End reverse loop
+
+
+
+# Stack B now holds our input in the correct order, so switch to that
+swap
+
+# r0 = dial value
+# r1 = current direction
+# r2 = current amount
+# r3 = 0 counter
+# r4 = amount multiplier (spin left or right)
+
+# Dial points at 50 to start
+set 50
+cp rv r0
+
+# Start rotation loop
+
+    # Store direction
+    pop
+    cp rv r1
+    # Store amount
+    pop
+    cp rv r2
+
+    # Set amount multiplier (left vs right) to 1
+    set 1
+    cp rv r4
+
+    # If right skip mul val by -1
+    # L == 76, R == 82
+    cpeq 53 rc r1 82 
+    # else, mul -1 for left
+    mul -1 r2
+    cp rv r2
+    # End cond
+
+    add r0 r2
+    cp rv r0
+
+    # If the dial is < 0, add 100 to get back in range
+    # So skip if not
+    cpgt 63 rc r0 0
+    add 100 r0
+    cp rv r0
+    # End conditional
+
+    # If the dial is > 99, minus 100 to get back in range
+    # So skip if not
+    cplt 70 rc r0 100
+    sub r0 100
+    cp rv r0
+    # End conditional
+
+    # If dial value == 0, increase our 0 counter
+    # Do the addition every time
+    add r3 1
+    # Only copy result if dial == 0
+    cpeq rv r3 r0 0
+
+    # While the stack has values to process, loop
+    cpgt 34 rc rs 0
+
+# End rotation loop
+
+# Print password
+wrt r3
