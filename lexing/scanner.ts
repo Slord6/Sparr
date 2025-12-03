@@ -96,6 +96,10 @@ export class Scanner {
         this.addToken(TokenType.Command, command);
     }
 
+    private alphaNumber(c: string): void {
+        this.addToken(TokenType.AlphaNumber, c);
+    }
+
     private scanToken() {
         const c = this.advance();
         switch (c) {
@@ -117,8 +121,14 @@ export class Scanner {
             default:
                 if (this.isDigit(c) || c === "-") {
                     this.number();
-                } else if (this.isAlphaNumeric(c)) {
-                    this.command(c);
+                } else if (this.isAlpha(c)) {
+                    // If longer than 1 char, it's a command
+                    if(this.isAlpha(this.peek())) {
+                        this.command(c);
+                    } else {
+                        // Otherwise, a single-digit char
+                        this.alphaNumber(c);
+                    }
                 } else {
                     throw new LexError(`${this._line}: Unexpected char ${c}`);
                 }
