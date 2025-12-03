@@ -130,3 +130,7 @@ dist
 .pnp.*
 
 dist/
+
+
+# Ignore Advent of Code puzzle inputs
+advent_of_code/**/*.txt
