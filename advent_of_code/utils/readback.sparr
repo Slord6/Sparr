@@ -1,0 +1,34 @@
+# Assumes that data was provided to VM on CLI
+# Start by reversing the input
+# Start reverse loop
+
+    # Pop A
+    pop
+    # Switch to B
+    swap
+    # Push onto B
+    push
+    # Switch back to A
+    swap
+
+    # If stack A not empty, keep looping (stack size > r9 (0))
+    cpgt 2 rc rs 0
+
+# End reverse loop
+
+
+
+# Stack B now holds our input in the correct order, so switch to that
+swap
+
+# Start print loop
+    pop
+    wrt rv
+    wrtc rv
+
+    wrtc 10
+
+    # Keep looping while stack has values
+    cpgt 24 rc rs 0
+# End loop
+

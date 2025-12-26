@@ -1,0 +1,147 @@
+# Assumes that data was provided to VM on CLI
+# Start by reversing the input
+# Start reverse loop
+
+    # Pop A
+    pop
+    # Switch to B
+    swap
+    # Push onto B
+    push
+    # Switch back to A
+    swap
+
+    # If stack A not empty, keep looping (stack size > 0)
+    cpgt 2 rc rs 0
+
+# End reverse loop
+
+
+
+# Stack B now holds our input in the correct order, so switch to that
+swap
+
+# r0 = dial value
+# r1 = current direction
+# r2 = current amount
+# r6 = current amount (abs)
+# r3 = 0 counter
+# r4 = amount multiplier (spin left or right)
+# r5 = last dial value
+
+# r7 = temp working
+
+# Dial points at 50 to start
+set 50
+cp rv r0
+cp rv r5
+wrt r0
+# Start rotation loop
+    wrtc 126
+    # Store direction
+    pop
+    cp rv r1
+    # Store amount
+    pop
+    cp rv r2
+    # wrt r2
+    # Copy of amount which won't be modified (absolute val)
+    cp rv r6
+    wrt r0
+    
+    # Set amount multiplier (left vs right) to 1
+    set 1
+    cp rv r4
+    # If right skip mul val by -1
+    # L == 76, R == 82
+    cpeq 61 rc r1 82 
+    # else, mul -1 for left
+    mul -1 r2
+    cp rv r2
+    # End cond
+
+    #r9 = full rotations from this change
+    #r8 = remainder after full rotations
+
+    # Calculate number of full rotations, unsigned
+    # 100 steps in full rot
+    div r6 100
+    cp rv r7 # temp
+
+    # Floor result
+    mod rv 1
+    sub r7 rv
+    cp rv r9
+    
+    # Calculate remainder after rotations
+    mod r2 100
+    cp rv r8
+
+    # Add full rotations to zero counter
+    add r9 r3
+    cp rv r3
+
+    # Apply the remainder to the dial
+    add r8 r0
+    cp rv r0
+    
+    # If the dial is < 0, add 100 to get back in range
+    # So skip if not
+    cpgt 101 rc r0 -1
+        add 100 r0
+        cp rv r0
+        # If we do this, we passed zero again, so we add 1 to the zero counter
+        # Unless we started at zero or end at zero, in which case skip
+        cpeq 99 rc r5 0 # Started at zero
+            add 1 r3
+            cpeq 99 rc r0 0 # Ended at zero
+            cp rv r3
+        # End conditional
+        wrtc 60
+    # End conditional
+
+    # If the dial is > 99, minus 100 to get back in range
+    # So skip if not
+    cplt 116 rc r0 100
+        sub r0 100
+        cp rv r0
+        # If we do this, we passed zero again, so we add 1 to the zero counter
+        # Unless we started at zero, in which case skip
+        cpeq 114 rc r5 0 # Started at zero
+            add 1 r3
+            cpeq 114 rc r0 0 # Ended at zero
+            cp rv r3
+        # End conditional
+        wrtc 62
+    # End conditional
+
+    # If dial == 0 add one to zero counter
+    # So hop to the addition if it is
+    cpeq 122 rc r0 0
+    cpeq 127 rc 1 1 # Always true, so skip the addition if we got here
+    
+        wrtc 35
+        add 1 r3
+        cp rv r3
+
+    # End conditional
+
+    wrtc r1
+    wrt r2
+    wrtc 10
+    wrt r3
+    wrt r0
+    wrtc 10
+
+    wrtc 126
+
+    cp r0 r5
+
+    # While the stack has values to process, loop
+    cpgt 39 rc rs 0
+
+# End rotation loop
+
+wrtc 10
+# Print password
+wrt r3
